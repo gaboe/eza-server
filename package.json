@@ -2,6 +2,9 @@
   "name": "eza-server",
   "version": "1.0.0",
   "main": "server.ts",
+  "author": {
+    "name": "Gabriel Ecegi"
+  },
   "license": "MIT",
   "scripts": {
     "ts": "yarn tslint && tsc -w",
@@ -10,9 +13,11 @@
     "dev": "concurrently -k -p \"[{name}]\" -n \"yellow.bold,cyan.bold,green.bold\" \"yarn ts\" \"yarn run serve-debug\""
   },
   "dependencies": {
+    "dotenv": "^5.0.1",
     "express": "^4.16.3"
   },
   "devDependencies": {
+    "@types/dotenv": "^4.0.2",
     "@types/express": "^4.11.1",
     "concurrently": "^3.5.1",
     "nodemon": "^1.17.2",

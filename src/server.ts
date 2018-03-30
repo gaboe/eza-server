@@ -2,7 +2,7 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
-import { Schema } from "./schema/Schema";
+import { AppSchema } from "./schema/Schema";
 const { ApolloEngine } = require("apollo-engine");
 
 dotenv.config();
@@ -19,7 +19,7 @@ if (process.env.PORT) {
     app.use("/graphql", bodyParser.json(), graphqlExpress(req => {
         return {
             context: { req: req },
-            schema: Schema,
+            schema: AppSchema,
             tracing: true,
             cacheControl: true,
         };

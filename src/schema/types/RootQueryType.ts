@@ -1,12 +1,15 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLInt } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull, GraphQLList } from "graphql";
+import { getSchemas } from "../../services/SchemaService";
+import { SchemaType } from "./SchemaType";
 
 const RootQueryType = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
-        schamas: {
-            type: new GraphQLNonNull(GraphQLInt),
-            resolve() {
-                return 45;
+        schemas: {
+            type: new GraphQLNonNull(new GraphQLList(SchemaType)),
+            async resolve() {
+                const schemas = await getSchemas();
+                return schemas;
             }
         }
     }

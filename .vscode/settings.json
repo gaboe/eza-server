@@ -1,8 +1,8 @@
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#01690f",
-        "statusBar.noFolderBackground": "#01690f",
-        "statusBar.debuggingBackground": "#01690f"
+        "statusBar.background": "#bd040481",
+        "statusBar.noFolderBackground": "#bd040481",
+        "statusBar.debuggingBackground": "#bd040481"
     }
 }

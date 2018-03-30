@@ -19,13 +19,15 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "graphql": "^0.13.1",
-    "mssql": "^4.1.0"
+    "mssql": "^4.1.0",
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "@types/dotenv": "^4.0.2",
     "@types/express": "^4.11.1",
     "@types/graphql": "^0.12.7",
     "@types/mssql": "^4.0.7",
+    "@types/ramda": "^0.25.21",
     "concurrently": "^3.5.1",
     "nodemon": "^1.17.2",
     "tslint": "^5.9.1",

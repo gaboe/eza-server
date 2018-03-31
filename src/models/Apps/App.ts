@@ -1,31 +1,24 @@
-type App = {
-    description: AppDescription,
-    menuItems: MenuItem[],
-    pages: Page[],
-};
+import { Document, Schema, model } from "mongoose";
+import { appDescriptionSchema, IAppDescription } from "./AppDescription";
+import { MenuItem, menuItemsSchema } from "./MenuItem";
+import { Page, pageSchema } from "./Page";
 
-type Page = {
-    name: string,
-    table: ViewTable
-};
+interface IApp {
+    description: IAppDescription;
+    menuItems: MenuItem[];
+    pages: Page[];
+}
 
-type ViewTable = {
-    columns: ViewColumns[],
-};
+interface IAppModel extends IApp, Document { }
 
-type ViewColumns = {
-    schema: string,
-    table: string,
-    column: string
-};
+const appSchema = new Schema(
+    {
+        description: appDescriptionSchema,
+        menuItems: [menuItemsSchema],
+        pages: [pageSchema]
+    }
+);
 
-type MenuItem = {
-    name: string,
-    order: number,
-};
+const App = model<IAppModel>("App", appSchema);
 
-type AppDescription = {
-    name: string,
-};
-
-export { App, AppDescription };
+export { IApp, App };

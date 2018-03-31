@@ -3,6 +3,8 @@ import { getSchemas } from "../../services/SchemaService";
 import { SchemaType } from "./SchemaType";
 import { TableType } from "./TableType";
 import { getTablesBySchema } from "../../services/TableService";
+import { getColumnsByTableName } from "../../services/ColumnService";
+import { ColumnType } from "./ColumnType";
 
 const RootQueryType = new GraphQLObjectType({
     name: "RootQueryType",
@@ -25,12 +27,23 @@ const RootQueryType = new GraphQLObjectType({
                 const tables = await getTablesBySchema((args as TablesArgs).schemaName);
                 return tables;
             }
+        },
+        columns: {
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnType))),
+            args: {
+                tableName: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            async resolve(_, args) {
+                const columns = await getColumnsByTableName((args as ColumnArgs).tableName);
+                return columns;
+            }
         }
     },
 });
 
-type TablesArgs = {
-    schemaName: string,
-};
+type TablesArgs = { schemaName: string, };
+type ColumnArgs = { tableName: string, };
 
 export { RootQueryType };

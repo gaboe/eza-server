@@ -148,6 +148,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/tedious@^1.8.32":
+  version "1.8.32"
+  resolved "https://registry.yarnpkg.com/@types/tedious/-/tedious-1.8.32.tgz#1ac19b54a05123cbd282dcd2146828562631b661"
+  dependencies:
+    "@types/events" "*"
+    "@types/node" "*"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -2290,7 +2297,7 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
-tedious@^2.0.0:
+tedious@^2.0.0, tedious@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tedious/-/tedious-2.3.1.tgz#56e5008ab32a6245b5040e7d6fbb09d4fc0df664"
   dependencies:

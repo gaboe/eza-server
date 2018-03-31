@@ -11,19 +11,19 @@ const TableType = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString), },
         schemaName: { type: new GraphQLNonNull(GraphQLString), },
         columns: {
-            type: new GraphQLNonNull(new GraphQLList(ColumnType)),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnType))),
             resolve({ name }: Table) {
                 return getColumnsByTableName(name);
             }
         },
         referenced: {
-            type: new GraphQLNonNull(new GraphQLList(ReferenceConstrainType)),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ReferenceConstrainType))),
             resolve({ name }: Table) {
                 return getReferencedContstraints(name);
             }
         },
         referencing: {
-            type: new GraphQLNonNull(new GraphQLList(ReferenceConstrainType)),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ReferenceConstrainType))),
             resolve({ name }: Table) {
                 return getReferencingContstraints(name);
             }

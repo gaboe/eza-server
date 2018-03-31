@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
+import cors from "cors";
 import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
 import { AppSchema } from "./schema/Schema";
 const { ApolloEngine } = require("apollo-engine");
@@ -8,6 +9,17 @@ const { ApolloEngine } = require("apollo-engine");
 dotenv.config();
 
 const app = express.default();
+
+const corsOptions = {
+    origin: process.env.ALLOWED_CLIENT_ORIGIN, // TODO add enviroments
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true // <-- REQUIRED backend setting
+};
+
+app.options("*", cors(corsOptions)); // enable pre-flight request for DELETE request
+
+app.use(cors(corsOptions));
+
 if (process.env.PORT) {
     const port = process.env.PORT;
     app.set("port", port);

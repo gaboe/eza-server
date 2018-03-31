@@ -2,7 +2,7 @@ import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString } from "g
 import { getSchemas } from "../../services/SchemaService";
 import { SchemaType } from "./SchemaType";
 import { TableType } from "./TableType";
-import { getTablesBySchema } from "../../services/TableService";
+import { getTablesBySchema, getTable } from "../../services/TableService";
 import { getColumnsByTableName } from "../../services/ColumnService";
 import { ColumnType } from "./ColumnType";
 
@@ -28,6 +28,17 @@ const RootQueryType = new GraphQLObjectType({
                 return tables;
             }
         },
+        table: {
+            type: TableType,
+            args: {
+                tableName: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            async resolve(_, args) {
+                return getTable((args as TableArgs).tableName);
+            }
+        },
         columns: {
             type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnType))),
             args: {
@@ -44,6 +55,7 @@ const RootQueryType = new GraphQLObjectType({
 });
 
 type TablesArgs = { schemaName: string, };
+type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
 
 export { RootQueryType };

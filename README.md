@@ -1,7 +1,7 @@
 # eza-server
 
 
-# .env file content
+### .env file content
 PORT = 3000
 
 APOLLO_ENGINE_SECRET=<!ApolloEngineSecret>

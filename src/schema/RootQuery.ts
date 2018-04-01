@@ -1,12 +1,12 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString } from "graphql";
-import { getSchemas } from "../../services/SchemaService";
-import { SchemaType } from "./SchemaType";
-import { TableType } from "./TableType";
-import { getTablesBySchema, getTable } from "../../services/TableService";
-import { getColumnsByTableName } from "../../services/ColumnService";
-import { ColumnType } from "./ColumnType";
+import { getSchemas } from "../services/SchemaService";
+import { SchemaType } from "./types/SchemaType";
+import { TableType } from "./types/TableType";
+import { getTablesBySchema, getTable } from "../services/TableService";
+import { getColumnsByTableName } from "../services/ColumnService";
+import { ColumnType } from "./types/ColumnType";
 
-const RootQueryType = new GraphQLObjectType({
+const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
         schemas: {
@@ -58,4 +58,4 @@ type TablesArgs = { schemaName: string, };
 type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
 
-export { RootQueryType };
+export { RootQuery };

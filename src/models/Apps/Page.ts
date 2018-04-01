@@ -13,6 +13,7 @@ type PageTableColumn = {
     table: string,
     column: string
 };
+
 const pageTableColumnSchema = new Schema({
     dbSchema: String,
     table: String,

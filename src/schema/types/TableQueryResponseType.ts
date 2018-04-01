@@ -4,21 +4,22 @@ const ResponseColumnType = new GraphQLObjectType({
     name: "ResponseColumnType",
     fields: {
         columnName: { type: new GraphQLNonNull(GraphQLString) },
-        value: { type: new GraphQLNonNull(GraphQLString) },
+        value: { type: GraphQLString },
     }
 });
 
 const ResponseRowType = new GraphQLObjectType({
     name: "ResponseRowType",
     fields: {
-        columns: { type: new GraphQLList(ResponseColumnType) }
+        key: { type: new GraphQLNonNull(GraphQLString) },
+        columns: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ResponseColumnType))) }
     }
 });
 
 const TableQueryResponseType = new GraphQLObjectType({
     name: "TableQueryResponseType",
     fields: {
-        rows: { type: new GraphQLList(ResponseRowType) }
+        rows: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ResponseRowType))) },
     }
 });
 

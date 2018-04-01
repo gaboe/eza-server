@@ -33,9 +33,9 @@ const getQueryResult = async (columns: PageTableColumn[]) => {
         .request()
         .query(query);
 
-    console.log(result.recordset);
     const responseRow = result.recordset.map(record => {
         const row: ResponseRow = {
+            key: record[Object.keys(record)[0]],
             columns: Object.keys(record).map(key => {
                 const column: ResponseColumn = {
                     columnName: key,

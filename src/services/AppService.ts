@@ -4,6 +4,7 @@ import { Page, PageTableColumn } from "../models/Apps/Page";
 import { MenuItem } from "../models/Apps/MenuItem";
 import { maxBy } from "lodash";
 import { append } from "ramda";
+
 const getTestCid = () => {
     const cid = process.env.CID;
     if (cid) {
@@ -28,6 +29,7 @@ const addPage = async (columns: Column[], pageName: string) => {
     const app = await getAppByCid(getTestCid());
     if (app) {
         const page: Page = {
+            cid: shortid.generate(),
             name: pageName,
             table: {
                 columns: columns.map(x => {
@@ -45,6 +47,7 @@ const addPage = async (columns: Column[], pageName: string) => {
         const rank = maxElement && maxElement.rank || 0;
 
         const menuItem: MenuItem = {
+            pageCid: page.cid,
             name: pageName,
             rank: rank + 1
         };
@@ -56,7 +59,6 @@ const addPage = async (columns: Column[], pageName: string) => {
     }
     throw new Error;
 };
-
 
 const getAppByName = async (name: string) => {
     const app = await App.findOne({ "description.name": name });

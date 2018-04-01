@@ -4,6 +4,7 @@ import { PageTableType } from "./PageTableType";
 const PageType = new GraphQLObjectType({
     name: "PageType",
     fields: {
+        cid: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: new GraphQLNonNull(GraphQLString) },
         table: { type: new GraphQLNonNull(PageTableType) }
     }

@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 
 type Page = {
+    cid: string,
     name: string,
     table: PageTable
 };
@@ -28,6 +29,7 @@ const pageTableSchema = new Schema({
 });
 
 const pageSchema = new Schema({
+    cid: String,
     name: String,
     table: pageTableSchema
 });

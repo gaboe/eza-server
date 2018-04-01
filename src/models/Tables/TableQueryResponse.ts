@@ -4,6 +4,7 @@ type TableQueryResponse = {
 
 type ResponseRow = {
     columns: ResponseColumn[];
+    key: string;
 };
 
 type ResponseColumn = {

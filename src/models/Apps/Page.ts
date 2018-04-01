@@ -10,14 +10,16 @@ type PageTable = {
 
 type PageTableColumn = {
     dbSchema: string,
-    table: string,
-    column: string
+    dbTable: string,
+    dbColumn: string,
+    dbDataType: string,
 };
 
 const pageTableColumnSchema = new Schema({
     dbSchema: String,
-    table: String,
-    column: String
+    dbTable: String,
+    dbColumn: String,
+    dbDataType: String,
 });
 
 const pageTableSchema = new Schema({

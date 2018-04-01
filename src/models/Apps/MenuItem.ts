@@ -2,12 +2,12 @@ import { Schema } from "mongoose";
 
 type MenuItem = {
     name: string,
-    order: number,
+    rank: number,
 };
 
 const menuItemsSchema = new Schema({
     name: String,
-    order: Number
+    rank: Number
 });
 
 export { MenuItem, menuItemsSchema };

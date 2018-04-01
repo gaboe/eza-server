@@ -5,6 +5,8 @@ import { TableType } from "./types/TableType";
 import { getTablesBySchema, getTable } from "../services/TableService";
 import { getColumnsByTableName } from "../services/ColumnService";
 import { ColumnType } from "./types/ColumnType";
+import { AppType } from "./types/AppType";
+import { getAppByName } from "../services/AppService";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
@@ -50,6 +52,16 @@ const RootQuery = new GraphQLObjectType({
                 const columns = await getColumnsByTableName((args as ColumnArgs).tableName);
                 return columns;
             }
+        },
+        app: {
+            type: AppType,
+            args: {
+                appName: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, args) {
+                const app = await getAppByName((args as AppArgs).appName);
+                return app;
+            }
         }
     },
 });
@@ -57,5 +69,6 @@ const RootQuery = new GraphQLObjectType({
 type TablesArgs = { schemaName: string, };
 type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
+type AppArgs = { appName: string, };
 
 export { RootQuery };

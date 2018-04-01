@@ -15,4 +15,10 @@ const createApp = () => {
     App.create(a);
 };
 
-export { createApp };
+
+const getAppByName = async (name: string) => {
+    const app = await App.findOne({ "description.name": name });
+    return app;
+};
+
+export { createApp, getAppByName };

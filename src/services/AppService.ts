@@ -68,4 +68,4 @@ const getAppByCid = async (cid: string) => {
     return app;
 };
 
-export { createApp, getAppByName, addPage };
+export { createApp, getAppByName, addPage, getAppByCid };

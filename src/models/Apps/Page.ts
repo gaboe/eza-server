@@ -5,6 +5,7 @@ type Page = {
     table: PageTable
 };
 type PageTable = {
+    id?: string,
     columns: PageTableColumn[],
 };
 

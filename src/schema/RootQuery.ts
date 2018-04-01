@@ -6,7 +6,9 @@ import { getTablesBySchema, getTable } from "../services/TableService";
 import { getColumnsByTableName } from "../services/ColumnService";
 import { ColumnType } from "./types/ColumnType";
 import { AppType } from "./types/AppType";
-import { getAppByName } from "../services/AppService";
+import { getAppByCid } from "../services/AppService";
+import { TableQueryResponseType } from "./types/TableQueryResponseType";
+import { getTableQueryResponse } from "../services/TableQueryService";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
@@ -56,11 +58,19 @@ const RootQuery = new GraphQLObjectType({
         app: {
             type: AppType,
             args: {
-                appName: { type: new GraphQLNonNull(GraphQLString) },
+                cid: { type: new GraphQLNonNull(GraphQLString) },
             },
-            async resolve(_, args) {
-                const app = await getAppByName((args as AppArgs).appName);
-                return app;
+            resolve(_, args) {
+                return getAppByCid((args as AppArgs).cid);
+            }
+        },
+        tableQuery: {
+            type: TableQueryResponseType,
+            args: {
+                tableID: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(_, args) {
+                return getTableQueryResponse((args as TableQueryArgs).tableID);
             }
         }
     },
@@ -69,6 +79,7 @@ const RootQuery = new GraphQLObjectType({
 type TablesArgs = { schemaName: string, };
 type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
-type AppArgs = { appName: string, };
+type AppArgs = { cid: string, };
+type TableQueryArgs = { tableID: string, };
 
 export { RootQuery };

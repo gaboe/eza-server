@@ -3,8 +3,9 @@ const PageTableColumnType = new GraphQLObjectType({
     name: "PageTableColumnTyp",
     fields: {
         dbSchema: { type: new GraphQLNonNull(GraphQLString) },
-        table: { type: new GraphQLNonNull(GraphQLString) },
-        column: { type: new GraphQLNonNull(GraphQLString) },
+        dbTable: { type: new GraphQLNonNull(GraphQLString) },
+        dbColumn: { type: new GraphQLNonNull(GraphQLString) },
+        dbDataType: { type: new GraphQLNonNull(GraphQLString) },
     }
 });
 export { PageTableColumnType };

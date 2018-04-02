@@ -10,18 +10,29 @@ type PageTable = {
     columns: PageTableColumn[],
 };
 
+type PageTableColumnTable = {
+    dbSchemaName: string;
+    dbTableName: string;
+    isPrimary: boolean;
+};
+
+
+const pageTableColumnTableSchema = new Schema({
+    dbSchemaName: String,
+    dbTableName: String,
+    isPrimary: Boolean,
+});
+
 type PageTableColumn = {
-    dbSchema: string,
-    dbTable: string,
-    dbColumn: string,
-    dbDataType: string,
+    dbColumn: string;
+    dbDataType: string;
+    table: PageTableColumnTable;
 };
 
 const pageTableColumnSchema = new Schema({
-    dbSchema: String,
-    dbTable: String,
     dbColumn: String,
     dbDataType: String,
+    table: pageTableColumnTableSchema
 });
 
 const pageTableSchema = new Schema({
@@ -34,4 +45,4 @@ const pageSchema = new Schema({
     table: pageTableSchema
 });
 
-export { Page, PageTableColumn, PageTable, pageSchema };
+export { Page, PageTableColumn, PageTable, pageSchema, PageTableColumnTable };

@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { getQueryResult } from "./SqlQuery";
 import { TableQueryResponse } from "../models/Tables/TableQueryResponse";
 import { PageTableColumn } from "../models/Apps/Page";
+import { ColumnInput } from "../models/Columns/ColumnInput";
 
 const getTableQueryResponse = async (tableID: string) => {
     const app = await App.findOne({ "pages.table._id": new ObjectId(tableID) });
@@ -26,14 +27,16 @@ const getTableQueryResponse = async (tableID: string) => {
 };
 
 
-const getTableQueryPreview = async (columns: Column[]) => {
-    console.log(columns);
+const getTableQueryPreview = async (columns: ColumnInput[]) => {
     const res = await getQueryResult(columns.map(x => {
         const c: PageTableColumn = {
-            dbSchema: x.schemaName,
-            dbTable: x.tableName,
             dbColumn: x.name,
-            dbDataType: x.dataType
+            dbDataType: x.dataType,
+            table: {
+                isPrimary: x.table.isPrimary,
+                dbSchemaName: x.table.schemaName,
+                dbTableName: x.table.tableName,
+            }
         };
         return c;
     }));

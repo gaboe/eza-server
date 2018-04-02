@@ -50,10 +50,13 @@ const getAppPreview = async (columns: Column[], pageName: string) => {
             table: {
                 columns: columns.map(x => {
                     const col: PageTableColumn = {
-                        dbSchema: x.schemaName,
-                        dbTable: x.tableName,
                         dbColumn: x.name,
                         dbDataType: x.dataType,
+                        table: {
+                            isPrimary: true,
+                            dbSchemaName: x.schemaName,
+                            dbTableName: x.tableName
+                        }
                     };
                     return col;
                 })

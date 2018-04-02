@@ -6,9 +6,10 @@ import { getTablesBySchema, getTable } from "../services/TableService";
 import { getColumnsByTableName } from "../services/ColumnService";
 import { ColumnType } from "./types/ColumnType";
 import { AppType } from "./types/AppType";
-import { getAppByCid } from "../services/AppService";
+import { getAppByCid, getAppPreview } from "../services/AppService";
 import { TableQueryResponseType } from "./types/TableQueryResponseType";
-import { getTableQueryResponse } from "../services/TableQueryService";
+import { getTableQueryResponse, getTableQueryPreview } from "../services/TableQueryService";
+import { ColumnInputType } from "./inputTypes/ColumnInputType";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
@@ -72,7 +73,33 @@ const RootQuery = new GraphQLObjectType({
             resolve(_, args) {
                 return getTableQueryResponse((args as TableQueryArgs).tableID);
             }
-        }
+        },
+        appPreview: {
+            type: AppType,
+            args: {
+                columns: {
+                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
+                },
+                pageName: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve(_, args) {
+                const { columns, pageName } = (args as AppPreview);
+                return getAppPreview(columns, pageName);
+            }
+        },
+        tableQueryPreview: {
+            type: TableQueryResponseType,
+            args: {
+                columns: {
+                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
+                }
+            },
+            resolve(_, args) {
+                return getTableQueryPreview((args as TableQueryPreviewArgs).columns);
+            }
+        },
     },
 });
 
@@ -80,6 +107,12 @@ type TablesArgs = { schemaName: string, };
 type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
 type AppArgs = { cid: string, };
-type TableQueryArgs = { tableID: string, };
+type TableQueryPreviewArgs = { columns: Column[], };
+type TableQueryArgs = { tableID: string };
+
+type AppPreview = {
+    columns: Column[],
+    pageName: string,
+};
 
 export { RootQuery };

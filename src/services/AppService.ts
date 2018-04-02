@@ -3,7 +3,7 @@ import * as shortid from "shortid";
 import { Page, PageTableColumn } from "../models/Apps/Page";
 import { MenuItem } from "../models/Apps/MenuItem";
 import { maxBy } from "lodash";
-import { append } from "ramda";
+import { append, prepend } from "ramda";
 
 const getTestCid = () => {
     const cid = process.env.CID;
@@ -26,6 +26,22 @@ const createApp = () => {
 };
 
 const addPage = async (columns: Column[], pageName: string) => {
+    const app = await getAppPreview(columns, pageName);
+    app.save();
+    return app;
+};
+
+const getAppByName = async (name: string) => {
+    const app = await App.findOne({ "description.name": name });
+    return app;
+};
+
+const getAppByCid = async (cid: string) => {
+    const app = App.findOne({ cid });
+    return app;
+};
+
+const getAppPreview = async (columns: Column[], pageName: string) => {
     const app = await getAppByCid(getTestCid());
     if (app) {
         const page: Page = {
@@ -52,22 +68,11 @@ const addPage = async (columns: Column[], pageName: string) => {
             rank: rank + 1
         };
 
-        app.pages = append(page, app.pages);
+        app.pages = prepend(page, app.pages);
         app.menuItems = append(menuItem, app.menuItems);
-        app.save();
         return app;
     }
     throw new Error;
 };
 
-const getAppByName = async (name: string) => {
-    const app = await App.findOne({ "description.name": name });
-    return app;
-};
-
-const getAppByCid = async (cid: string) => {
-    const app = App.findOne({ cid });
-    return app;
-};
-
-export { createApp, getAppByName, addPage, getAppByCid };
+export { createApp, getAppByName, addPage, getAppByCid, getAppPreview };

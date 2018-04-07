@@ -1,10 +1,10 @@
-import { App, IApp } from "../models/Apps/App";
+import { App, IApp } from "../models/app/Apps/App";
 import * as shortid from "shortid";
-import { Page, PageTableColumn } from "../models/Apps/Page";
-import { MenuItem } from "../models/Apps/MenuItem";
+import { Page, PageTableColumn } from "../models/app/Apps/Page";
+import { MenuItem } from "../models/app/Apps/MenuItem";
 import { maxBy } from "lodash";
 import { append, prepend } from "ramda";
-import { ColumnInput } from "../models/Columns/ColumnInput";
+import { ColumnInput } from "../models/app/Columns/ColumnInput";
 
 const getTestCid = () => {
     const cid = process.env.CID;

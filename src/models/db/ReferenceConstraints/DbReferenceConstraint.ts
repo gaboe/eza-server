@@ -1,9 +1,9 @@
-type ReferenceConstrain = {
-    constrainName: string,
+type ReferenceConstraint = {
+    constraintName: string,
     referencedTableName: string,
     referencedColumnName: string,
     referencingTableName: string,
     referencingColumnName: string,
 };
 
-export { ReferenceConstrain };
+export { ReferenceConstraint };

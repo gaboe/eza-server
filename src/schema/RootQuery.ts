@@ -10,7 +10,7 @@ import { getAppByCid, getAppPreview } from "../services/AppService";
 import { TableQueryResponseType } from "./types/TableQueryResponseType";
 import { getTableQueryResponse, getTableQueryPreview } from "../services/TableQueryService";
 import { ColumnInputType } from "./inputTypes/ColumnInputType";
-import { ColumnInput } from "../models/Columns/ColumnInput";
+import { ColumnInput } from "../models/app/Columns/ColumnInput";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",

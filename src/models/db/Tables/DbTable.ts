@@ -1,6 +1,6 @@
-type Table = {
+type DbTable = {
     schemaName: string,
     name: string,
 };
 
-export { Table };
+export { DbTable };

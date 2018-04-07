@@ -1,11 +1,11 @@
-import { SqlSchema } from "../models/Schemas/SqlSchema";
+import { SqlSchema } from "../models/mssql/models/Schemas/MsSqlSchema";
 import { executeQuery } from "./SqlQuery";
-import { Schema } from "../models/Schemas/Schema";
+import { DbSchema } from "../models/db/Schemas/DbSchema";
 
 
 const getSchemas = async () => {
-    const schemas = executeQuery<SqlSchema, Schema>(`SELECT * FROM INFORMATION_SCHEMA.SCHEMATA`, e => {
-        const s: Schema = {
+    const schemas = executeQuery<SqlSchema, DbSchema>(`SELECT * FROM INFORMATION_SCHEMA.SCHEMATA`, e => {
+        const s: DbSchema = {
             name: e.SCHEMA_NAME
         };
         return s;

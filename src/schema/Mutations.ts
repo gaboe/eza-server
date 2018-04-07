@@ -2,6 +2,7 @@ import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString } from "g
 import { AppType } from "./types/AppType";
 import { createApp, addPage } from "../services/AppService";
 import { ColumnInputType } from "./inputTypes/ColumnInputType";
+import { ColumnInput } from "../models/app/Columns/ColumnInput";
 
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
@@ -31,7 +32,7 @@ const Mutation = new GraphQLObjectType({
 });
 
 type AddPageArgs = {
-    columns: Column[],
+    columns: ColumnInput[],
     pageName: string,
 };
 

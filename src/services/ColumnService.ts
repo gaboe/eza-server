@@ -1,9 +1,10 @@
 import { executeQuery } from "./SqlQuery";
+import { MsSqlColumn } from "../models/mssql/models/Columns/MsSqlColumn";
 
 const getColumnsByTableName = (tableName: string) => {
-    const columns = executeQuery<SqlColumn, Column>(`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`,
+    const columns = executeQuery<MsSqlColumn, DbColumn>(`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`,
         e => {
-            const column: Column = {
+            const column: DbColumn = {
                 name: e.COLUMN_NAME,
                 schemaName: e.TABLE_SCHEMA,
                 tableName: e.TABLE_NAME,

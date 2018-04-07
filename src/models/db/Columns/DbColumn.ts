@@ -1,4 +1,4 @@
-type Column = {
+type DbColumn = {
     name: string,
     schemaName: string,
     tableName: string,

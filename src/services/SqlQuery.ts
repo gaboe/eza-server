@@ -1,9 +1,9 @@
-import { PageTableColumn, PageTableColumnTable } from "../models/Apps/Page";
-import { ResponseRow, ResponseColumn } from "../models/Tables/TableQueryResponse";
+import { PageTableColumn, PageTableColumnTable } from "../models/app/Apps/Page";
+import { ResponseRow, ResponseColumn } from "../models/app/Tables/TableQueryResponse";
 import { groupBy, find } from "ramda";
 import { orderBy } from "lodash";
 import { nameof } from "../utils/Utils";
-import { getReferencedContstraints } from "./ReferenceConstrainService";
+import { getReferencedContstraints } from "./ReferenceConstraintService";
 
 const sql = require("mssql");
 

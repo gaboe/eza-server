@@ -1,10 +1,10 @@
 import { executeQuery } from "./SqlQuery";
-import { SqlTable } from "../models/Tables/SqlTable";
-import { Table } from "../models/Tables/Table";
+import { SqlTable } from "../models/mssql/models/Tables/MsSqlTable";
+import { DbTable } from "../models/db/Tables/DbTable";
 
 const getTablesBySchema = (schema: string) => {
-    const tables = executeQuery<SqlTable, Table>(`SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${schema}'`, e => {
-        const table: Table = {
+    const tables = executeQuery<SqlTable, DbTable>(`SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${schema}'`, e => {
+        const table: DbTable = {
             name: e.TABLE_NAME,
             schemaName: e.TABLE_SCHEMA
         };
@@ -14,8 +14,8 @@ const getTablesBySchema = (schema: string) => {
 };
 
 const getTable = async (tableName: string) => {
-    const tables = await executeQuery<SqlTable, Table>(`SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '${tableName}'`, e => {
-        const table: Table = {
+    const tables = await executeQuery<SqlTable, DbTable>(`SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '${tableName}'`, e => {
+        const table: DbTable = {
             name: e.TABLE_NAME,
             schemaName: e.TABLE_SCHEMA
         };

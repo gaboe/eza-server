@@ -1,4 +1,4 @@
-type ReferenceConstrainSql = {
+type MsSqlReferenceConstraint = {
     ConstrainName: string,
     ReferencedTableName: string,
     ReferencedColumnName: string,
@@ -6,4 +6,4 @@ type ReferenceConstrainSql = {
     ReferencingColumnName: string,
 };
 
-export { ReferenceConstrainSql };
+export { MsSqlReferenceConstraint };

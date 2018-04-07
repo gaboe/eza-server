@@ -8,9 +8,9 @@ import { DbColumnType } from "./types/db/DbColumnType";
 import { AppType } from "./types/AppType";
 import { getAppByCid, getAppPreview } from "../services/AppService";
 import { TableQueryResponseType } from "./types/TableQueryResponseType";
-import { getTableQueryResponse, getTableQueryPreview } from "../services/TableQueryService";
-import { ColumnInputType } from "./inputTypes/ColumnInputType";
-import { ColumnInput } from "../models/app/Columns/ColumnInput";
+import { getTableQueryResponse, getTableQueryPreview, } from "../services/TableQueryService";
+import { TableInputType } from "./inputTypes/TableInputType";
+import { Table } from "../models/app/Tables/Table";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
@@ -78,27 +78,27 @@ const RootQuery = new GraphQLObjectType({
         appPreview: {
             type: AppType,
             args: {
-                columns: {
-                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
+                table: {
+                    type: new GraphQLNonNull(TableInputType)
                 },
                 pageName: {
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
             resolve(_, args) {
-                const { columns, pageName } = (args as AppPreview);
-                return getAppPreview(columns, pageName);
+                const { table, pageName } = (args as AppPreview);
+                return getAppPreview(table, pageName);
             }
         },
         tableQueryPreview: {
             type: TableQueryResponseType,
             args: {
-                columns: {
-                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
+                table: {
+                    type: new GraphQLNonNull(TableInputType)
                 }
             },
             async resolve(_, args) {
-                const data = await getTableQueryPreview((args as TableQueryPreviewArgs).columns);
+                const data = await getTableQueryPreview((args as AppPreview).table);
                 return data;
             }
         },
@@ -109,11 +109,10 @@ type TablesArgs = { schemaName: string, };
 type TableArgs = { tableName: string, };
 type ColumnArgs = { tableName: string, };
 type AppArgs = { cid: string, };
-type TableQueryPreviewArgs = { columns: ColumnInput[], };
 type TableQueryArgs = { tableID: string };
 
 type AppPreview = {
-    columns: ColumnInput[],
+    table: Table,
     pageName: string,
 };
 

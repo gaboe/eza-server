@@ -1,7 +1,7 @@
 import { executeQuery } from "./SqlQuery";
 import { MsSqlReferenceConstraint } from "../models/mssql/models/ReferenceContstrains/MsSqlReferenceConstrainSql";
 import { ReferenceConstraint } from "../models/db/ReferenceConstraints/DbReferenceConstraint";
-import { getReferencedConstrainsQuery, getReferencingConstrainsQuery, getReferenceConstrainQuery } from "../sql/RefernceConstrainQueries";
+import { getReferencedConstrainsQuery, getReferencingConstrainsQuery, getReferenceConstrainQuery } from "../sql/ReferenceConstraintQueries";
 
 const getReferencedContstraints = (tableName: string) => {
     const result = executeQuery<MsSqlReferenceConstraint, ReferenceConstraint>(getReferencedConstrainsQuery(tableName), mapEntity);
@@ -20,9 +20,11 @@ const getReferenceConstraint = async (referencingTableName: string, referencedTa
 
 const mapEntity = (e: MsSqlReferenceConstraint) => {
     const rc: ReferenceConstraint = {
-        constraintName: e.ConstrainName,
+        constraintName: e.ConstraintName,
+        referencedSchemaName: e.ReferencedSchemaName,
         referencedTableName: e.ReferencedTableName,
         referencedColumnName: e.ReferencedColumnName,
+        referencingSchemaName: e.ReferencingSchemaName,
         referencingTableName: e.ReferencingTableName,
         referencingColumnName: e.ReferencingColumnName
     };

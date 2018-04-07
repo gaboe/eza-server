@@ -1,9 +1,7 @@
-import { PageTableColumn, PageTableColumnTable } from "../models/app/Pages/Page";
+import { Table } from "../models/app/Tables/Table";
+import { find } from "ramda";
+import { isNotNullOrUndefined } from "../utils/Utils";
 import { ResponseRow, ResponseColumn } from "../models/app/Tables/TableQueryResponse";
-import { groupBy, find } from "ramda";
-import { orderBy } from "lodash";
-import { nameof } from "../utils/Utils";
-import { getReferencedContstraints } from "./ReferenceConstraintService";
 
 const sql = require("mssql");
 
@@ -26,6 +24,7 @@ type TableInQuery = {
     name: string;
     alias: string;
     isPrimary: boolean;
+    join?: string;
 };
 
 type ColumnInQuery = {
@@ -34,61 +33,59 @@ type ColumnInQuery = {
     name: string;
 };
 
-const getTablesInQuery = (columns: PageTableColumn[]) => {
-    const tablesGrouped = groupBy(x => x.table.dbTableName,
-        orderBy(columns, [nameof<PageTableColumn>("table"), nameof<PageTableColumnTable>("isPrimary")], "asc"));
+const getTablesInQuery = (table: Table) => {
 
-    const tables = Object.keys(tablesGrouped).map((tableName, index) => {
-        const firstCol = find(e => e.table.dbTableName === tableName, columns);
-        if (firstCol) {
-            const table: TableInQuery = {
-                isPrimary: firstCol.table.isPrimary,
-                name: firstCol.table.dbTableName,
-                schema: firstCol.table.dbSchemaName,
-                alias: `[T${index}]`
-            };
-            return table;
-        }
-        throw new Error();
-    });
-    return tables;
+    const foreignTables = table.columns
+        .filter(x => x.reference !== undefined)
+        .map((x, i) => {
+            if (x.reference) {
+                const alias = `[T${i + 1}]`;
+                const t: TableInQuery = {
+                    schema: x.schemaName,
+                    name: x.tableName,
+                    isPrimary: false,
+                    alias: alias,
+                    join: `${x.reference.type} ${x.schemaName}.${x.tableName} ${alias} ON ${alias}.${x.columnName} = [T0].${x.reference.primaryKey}`
+                };
+                return t;
+            }
+            return null;
+        })
+        .filter(isNotNullOrUndefined);
+
+    return foreignTables;
 };
 
-const getColumnsInQuery = (tables: TableInQuery[], columns: PageTableColumn[]) => {
-    const cols = columns.map(column => {
-        const table = find(x => x.name === column.table.dbTableName, tables);
-        if (table) {
-            const c: ColumnInQuery = {
-                table: table,
-                rawSql: `${table.alias}.${column.dbColumn}`,
-                name: column.dbColumn
+const getColumnsInQuery = (foreignTables: TableInQuery[], primaryTable: Table) => {
+    const cols = primaryTable.columns
+        .filter(x => !isNotNullOrUndefined(x.reference))
+        .map(column => {
+            const table = find(x => x.schema === column.schemaName && x.name === column.tableName, foreignTables);
+            if (table) {
+                const c: ColumnInQuery = {
+                    table: table,
+                    rawSql: `${table.alias}.${column.columnName}`,
+                    name: column.columnName
+                };
+                return c;
+            }
+            const primaryColumn: ColumnInQuery = {
+                table: { alias: "[T0]", isPrimary: true, name: primaryTable.tableName, schema: primaryTable.schemaName },
+                rawSql: `[T0].${column.columnName}`,
+                name: column.columnName,
             };
-            return c;
-        }
-        throw new Error();
-    });
+            return primaryColumn;
+        });
     return cols;
 };
 
-const strictFind = <T>(fn: (a: T) => boolean, list: ReadonlyArray<T>): T => {
-    const value = find(fn, list);
-    if (value) {
-        return value;
-    }
-    throw new Error(`nothing found by ${fn} on list: ${list}`);
-};
+const getQueryResult = async (table: Table) => {
+    const tables = getTablesInQuery(table);
+    const cols = getColumnsInQuery(tables, table);
 
-const getQueryResult = async (columns: PageTableColumn[]) => {
-    const tables = getTablesInQuery(columns);
-    console.log(":tables", tables);
-    const cols = getColumnsInQuery(tables, columns);
-    const primaryTable = strictFind(x => x.isPrimary, tables);
-    const joins = await buildJoins(tables);
-    const query = `${buildQuery(cols, primaryTable)}
-                ${joins}
+    const query = `SELECT\n${cols.map(x => x.rawSql).join(",\n")}\n FROM ${table.schemaName}.${table.tableName} [T0]
+                ${tables.map(x => x.join).join("\n")}
                 `;
-
-    console.log(query);
 
     const pool = new sql.ConnectionPool("mssql://app:123@localhost/eza");
     await pool.connect();
@@ -112,24 +109,6 @@ const getQueryResult = async (columns: PageTableColumn[]) => {
         return row;
     });
     return responseRow;
-};
-
-const buildJoins = async (tables: TableInQuery[]) => {
-    const primaryTable = strictFind(x => x.isPrimary, tables);
-    const referencedConstrains = await getReferencedContstraints(primaryTable.name);
-    const query = tables
-        .filter(x => !x.isPrimary)
-        .map(x => {
-            const reference = strictFind(r => r.referencedTableName === x.name, referencedConstrains);
-
-            const join = `JOIN ${x.schema}.${x.name} ${x.alias} ON ${x.alias}.${reference.referencingColumnName} = ${primaryTable.alias}.${reference.referencedColumnName}`;
-            return join;
-        });
-    return query.join("\n");
-};
-
-const buildQuery = (columns: ColumnInQuery[], primaryTable: TableInQuery) => {
-    return `SELECT ${columns.map(x => x.rawSql)} FROM ${primaryTable.schema}.${primaryTable.name} ${primaryTable.alias}`;
 };
 
 export { executeQuery, getQueryResult };

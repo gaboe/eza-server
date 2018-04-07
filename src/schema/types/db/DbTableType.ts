@@ -20,7 +20,6 @@ const TableType = new GraphQLObjectType({
             type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(DbReferenceConstrainType))),
             async resolve({ name }: DbTable) {
                 const referenced = await getReferencedContstraints(name);
-                console.log(referenced);
                 return referenced;
             }
         },

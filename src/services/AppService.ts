@@ -1,10 +1,10 @@
 import { App, IApp } from "../models/app/Apps/App";
 import * as shortid from "shortid";
-import { Page, PageTableColumn } from "../models/app/Pages/Page";
+import { Page } from "../models/app/Pages/Page";
 import { MenuItem } from "../models/app/MenuItems/MenuItem";
 import { maxBy } from "lodash";
 import { append, prepend } from "ramda";
-import { ColumnInput } from "../models/app/Columns/ColumnInput";
+import { Table } from "../models/app/Tables/Table";
 
 const getTestCid = () => {
     const cid = process.env.CID;
@@ -26,8 +26,8 @@ const createApp = () => {
     return a;
 };
 
-const addPage = async (columns: ColumnInput[], pageName: string) => {
-    const app = await getAppPreview(columns, pageName);
+const addPage = async (table: Table, pageName: string) => {
+    const app = await getAppPreview(table, pageName);
     app.save();
     return app;
 };
@@ -42,28 +42,13 @@ const getAppByCid = async (cid: string) => {
     return app;
 };
 
-const getAppPreview = async (columns: ColumnInput[], pageName: string) => {
+const getAppPreview = async (table: Table, pageName: string) => {
     const app = await getAppByCid(getTestCid());
     if (app) {
         const page: Page = {
             cid: shortid.generate(),
             name: pageName,
-            table: {
-                columns: columns.map(x => {
-                    const col: PageTableColumn = {
-                        dbColumn: x.name,
-                        dbDataType: x.dataType,
-                        table: {
-                            isPrimary: true,
-                            dbSchemaName: x.table.schemaName,
-                            dbTableName: x.table.tableName
-                        }
-                    };
-                    console.log(col);
-
-                    return col;
-                })
-            }
+            table: table
         };
         const maxElement = maxBy(app.menuItems, e => e.rank);
         const rank = maxElement && maxElement.rank || 0;

@@ -19,7 +19,6 @@ const mongoURL = process.env.MONGOLAB_URI || process.env.MONGODB_URI;
 console.log(`\nConnecting to db: ${mongoURL}\n`);
 
 if (mongoURL) {
-    // console.log(mongoose);
     mongoose.connect(mongoURL);
 }
 else {

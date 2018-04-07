@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt } from "graphql";
 
 const DbColumnType = new GraphQLObjectType({
-    name: "ColumnType",
+    name: "DbColumnType",
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString), },
         schemaName: { type: new GraphQLNonNull(GraphQLString), },

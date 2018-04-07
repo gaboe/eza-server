@@ -4,4 +4,7 @@ type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
 
 const nameof = <T>(key: keyof T): keyof T => key;
 
-export { Diff, Omit, nameof };
+const isNotNullOrUndefined = <T extends Object>(input: null | undefined | T): input is T => input != null;
+
+
+export { Diff, Omit, nameof, isNotNullOrUndefined };

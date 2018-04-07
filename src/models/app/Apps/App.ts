@@ -1,7 +1,7 @@
 import { Document, Schema, model } from "mongoose";
 import { appDescriptionSchema, IAppDescription } from "./AppDescription";
-import { MenuItem, menuItemsSchema } from "./MenuItem";
-import { Page, pageSchema } from "./Page";
+import { Page, pageSchema } from "./../Pages/Page";
+import { MenuItem, menuItemsSchema } from "../MenuItems/MenuItem";
 
 interface IApp {
 

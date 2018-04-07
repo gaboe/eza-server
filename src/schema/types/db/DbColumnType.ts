@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt } from "graphql";
 
-const ColumnType = new GraphQLObjectType({
+const DbColumnType = new GraphQLObjectType({
     name: "ColumnType",
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString), },
@@ -11,4 +11,4 @@ const ColumnType = new GraphQLObjectType({
     }
 });
 
-export { ColumnType };
+export { DbColumnType };

@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString } from "graphql";
 import { getSchemas } from "../services/SchemaService";
-import { SchemaType } from "./types/SchemaType";
-import { TableType } from "./types/TableType";
+import { DbSchemaType } from "./types/db/DbSchemaType";
+import { TableType } from "./types/db/DbTableType";
 import { getTablesBySchema, getTable } from "../services/TableService";
 import { getColumnsByTableName } from "../services/ColumnService";
-import { ColumnType } from "./types/ColumnType";
+import { DbColumnType } from "./types/db/DbColumnType";
 import { AppType } from "./types/AppType";
 import { getAppByCid, getAppPreview } from "../services/AppService";
 import { TableQueryResponseType } from "./types/TableQueryResponseType";
@@ -16,7 +16,7 @@ const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
         schemas: {
-            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SchemaType))),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(DbSchemaType))),
             async resolve() {
                 const schemas = await getSchemas();
                 return schemas;
@@ -46,7 +46,7 @@ const RootQuery = new GraphQLObjectType({
             }
         },
         columns: {
-            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnType))),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(DbColumnType))),
             args: {
                 tableName: {
                     type: new GraphQLNonNull(GraphQLString)

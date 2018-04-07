@@ -1,4 +1,4 @@
-import { PageTableColumn, PageTableColumnTable } from "../models/app/Apps/Page";
+import { PageTableColumn, PageTableColumnTable } from "../models/app/Pages/Page";
 import { ResponseRow, ResponseColumn } from "../models/app/Tables/TableQueryResponse";
 import { groupBy, find } from "ramda";
 import { orderBy } from "lodash";

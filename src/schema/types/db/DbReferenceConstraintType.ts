@@ -1,9 +1,9 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from "graphql";
 
-const ReferenceConstrainType = new GraphQLObjectType({
-    name: "ReferenceConstrainType",
+const DbReferenceConstrainType = new GraphQLObjectType({
+    name: "DbReferenceConstrainType",
     fields: {
-        constrainName: { type: new GraphQLNonNull(GraphQLString), },
+        constraintName: { type: new GraphQLNonNull(GraphQLString), },
         referencedTableName: { type: new GraphQLNonNull(GraphQLString), },
         referencedColumnName: { type: new GraphQLNonNull(GraphQLString), },
         referencingTableName: { type: new GraphQLNonNull(GraphQLString), },
@@ -11,4 +11,4 @@ const ReferenceConstrainType = new GraphQLObjectType({
     }
 });
 
-export { ReferenceConstrainType };
+export { DbReferenceConstrainType };

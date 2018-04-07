@@ -2,7 +2,7 @@ import { App } from "../models/app/Apps/App";
 import { ObjectId } from "mongodb";
 import { getQueryResult } from "./SqlQuery";
 import { TableQueryResponse } from "../models/app/Tables/TableQueryResponse";
-import { PageTableColumn } from "../models/app/Apps/Page";
+import { PageTableColumn } from "../models/app/Pages/Page";
 import { ColumnInput } from "../models/app/Columns/ColumnInput";
 
 const getTableQueryResponse = async (tableID: string) => {

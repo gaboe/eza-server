@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from "graphql";
 
-const SchemaType = new GraphQLObjectType({
-    name: "SchemaType",
+const DbSchemaType = new GraphQLObjectType({
+    name: "DbSchemaType",
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString), }
     }
 });
 
-export { SchemaType };
+export { DbSchemaType };

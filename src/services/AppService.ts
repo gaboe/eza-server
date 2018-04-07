@@ -1,7 +1,7 @@
 import { App, IApp } from "../models/app/Apps/App";
 import * as shortid from "shortid";
-import { Page, PageTableColumn } from "../models/app/Apps/Page";
-import { MenuItem } from "../models/app/Apps/MenuItem";
+import { Page, PageTableColumn } from "../models/app/Pages/Page";
+import { MenuItem } from "../models/app/MenuItems/MenuItem";
 import { maxBy } from "lodash";
 import { append, prepend } from "ramda";
 import { ColumnInput } from "../models/app/Columns/ColumnInput";

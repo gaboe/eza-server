@@ -1,7 +1,7 @@
 import { executeQuery } from "./SqlQuery";
 import { ReferenceConstrainSql } from "../models/ReferenceContsrains/ReferenceConstrainSql";
 import { ReferenceConstrain } from "../models/ReferenceContsrains/ReferenceConstrain";
-import { getReferencedConstrainsQuery, getReferencingConstrainsQuery } from "../sql/RefernceConstrainQueries";
+import { getReferencedConstrainsQuery, getReferencingConstrainsQuery, getReferenceConstrainQuery } from "../sql/RefernceConstrainQueries";
 
 const getReferencedContstraints = (tableName: string) => {
     const result = executeQuery<ReferenceConstrainSql, ReferenceConstrain>(getReferencedConstrainsQuery(tableName), mapEntity);
@@ -11,6 +11,11 @@ const getReferencedContstraints = (tableName: string) => {
 const getReferencingContstraints = (tableName: string) => {
     const result = executeQuery<ReferenceConstrainSql, ReferenceConstrain>(getReferencingConstrainsQuery(tableName), mapEntity);
     return result;
+};
+
+const getReferenceConstrain = async (referencingTableName: string, referencedTableName: string) => {
+    const result = await executeQuery<ReferenceConstrainSql, ReferenceConstrain>(getReferenceConstrainQuery(referencingTableName, referencedTableName), mapEntity);
+    return result[0];
 };
 
 const mapEntity = (e: ReferenceConstrainSql) => {
@@ -24,4 +29,4 @@ const mapEntity = (e: ReferenceConstrainSql) => {
     return rc;
 };
 
-export { getReferencedContstraints, getReferencingContstraints };
+export { getReferencedContstraints, getReferencingContstraints, getReferenceConstrain };

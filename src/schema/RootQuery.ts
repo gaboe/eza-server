@@ -97,8 +97,9 @@ const RootQuery = new GraphQLObjectType({
                     type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
                 }
             },
-            resolve(_, args) {
-                return getTableQueryPreview((args as TableQueryPreviewArgs).columns);
+            async resolve(_, args) {
+                const data = await getTableQueryPreview((args as TableQueryPreviewArgs).columns);
+                return data;
             }
         },
     },
@@ -112,7 +113,7 @@ type TableQueryPreviewArgs = { columns: ColumnInput[], };
 type TableQueryArgs = { tableID: string };
 
 type AppPreview = {
-    columns: Column[],
+    columns: ColumnInput[],
     pageName: string,
 };
 

@@ -40,6 +40,7 @@ const getTableQueryPreview = async (columns: ColumnInput[]) => {
         };
         return c;
     }));
+    console.log("res", res);
     const response: TableQueryResponse = {
         rows: res
     };

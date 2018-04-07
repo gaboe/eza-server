@@ -1,3 +1,10 @@
+const getReferenceConstrainQuery = (referencingTableName: string, referencedTableName: string) => {
+    return `${getBaseReferenceQuery()}
+            WHERE C.TABLE_NAME  = '${referencingTableName}'
+            AND C2.TABLE_NAME  = '${referencedTableName}'
+    `;
+};
+
 const getReferencingConstrainsQuery = (tableName: string) => {
     return `${getBaseReferenceQuery()}
             WHERE C2.TABLE_NAME  = '${tableName}'
@@ -36,4 +43,4 @@ const getBaseReferenceQuery = () => {
 `;
 };
 
-export { getReferencedConstrainsQuery, getReferencingConstrainsQuery };
+export { getReferencedConstrainsQuery, getReferencingConstrainsQuery, getReferenceConstrainQuery };

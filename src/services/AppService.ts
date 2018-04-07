@@ -4,6 +4,7 @@ import { Page, PageTableColumn } from "../models/Apps/Page";
 import { MenuItem } from "../models/Apps/MenuItem";
 import { maxBy } from "lodash";
 import { append, prepend } from "ramda";
+import { ColumnInput } from "../models/Columns/ColumnInput";
 
 const getTestCid = () => {
     const cid = process.env.CID;
@@ -25,7 +26,7 @@ const createApp = () => {
     return a;
 };
 
-const addPage = async (columns: Column[], pageName: string) => {
+const addPage = async (columns: ColumnInput[], pageName: string) => {
     const app = await getAppPreview(columns, pageName);
     app.save();
     return app;
@@ -41,7 +42,7 @@ const getAppByCid = async (cid: string) => {
     return app;
 };
 
-const getAppPreview = async (columns: Column[], pageName: string) => {
+const getAppPreview = async (columns: ColumnInput[], pageName: string) => {
     const app = await getAppByCid(getTestCid());
     if (app) {
         const page: Page = {
@@ -54,10 +55,12 @@ const getAppPreview = async (columns: Column[], pageName: string) => {
                         dbDataType: x.dataType,
                         table: {
                             isPrimary: true,
-                            dbSchemaName: x.schemaName,
-                            dbTableName: x.tableName
+                            dbSchemaName: x.table.schemaName,
+                            dbTableName: x.table.tableName
                         }
                     };
+                    console.log(col);
+
                     return col;
                 })
             }

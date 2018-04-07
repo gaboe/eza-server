@@ -3,6 +3,7 @@ import { ResponseRow, ResponseColumn } from "../models/Tables/TableQueryResponse
 import { groupBy, find } from "ramda";
 import { orderBy } from "lodash";
 import { nameof } from "../utils/Utils";
+import { getReferencedContstraints } from "./ReferenceConstrainService";
 
 const sql = require("mssql");
 
@@ -20,27 +21,27 @@ const executeQuery = async<From, To>(query: string, map: (sqlEntity: From) => To
 
 };
 
-type TableQueryType = {
+type TableInQuery = {
     schema: string;
     name: string;
     alias: string;
     isPrimary: boolean;
 };
 
-type ColumnQueryType = {
+type ColumnInQuery = {
     rawSql: string;
-    table: TableQueryType;
+    table: TableInQuery;
     name: string;
 };
 
-const getTableQueryTypes = (columns: PageTableColumn[]) => {
+const getTablesInQuery = (columns: PageTableColumn[]) => {
     const tablesGrouped = groupBy(x => x.table.dbTableName,
         orderBy(columns, [nameof<PageTableColumn>("table"), nameof<PageTableColumnTable>("isPrimary")], "asc"));
 
     const tables = Object.keys(tablesGrouped).map((tableName, index) => {
         const firstCol = find(e => e.table.dbTableName === tableName, columns);
         if (firstCol) {
-            const table: TableQueryType = {
+            const table: TableInQuery = {
                 isPrimary: firstCol.table.isPrimary,
                 name: firstCol.table.dbTableName,
                 schema: firstCol.table.dbSchemaName,
@@ -53,11 +54,11 @@ const getTableQueryTypes = (columns: PageTableColumn[]) => {
     return tables;
 };
 
-const getColumnQueryTypes = (tables: TableQueryType[], columns: PageTableColumn[]) => {
+const getColumnsInQuery = (tables: TableInQuery[], columns: PageTableColumn[]) => {
     const cols = columns.map(column => {
         const table = find(x => x.name === column.table.dbTableName, tables);
         if (table) {
-            const c: ColumnQueryType = {
+            const c: ColumnInQuery = {
                 table: table,
                 rawSql: `${table.alias}.${column.dbColumn}`,
                 name: column.dbColumn
@@ -74,24 +75,19 @@ const strictFind = <T>(fn: (a: T) => boolean, list: ReadonlyArray<T>): T => {
     if (value) {
         return value;
     }
-    throw new Error();
+    throw new Error(`nothing found by ${fn} on list: ${list}`);
 };
 
 const getQueryResult = async (columns: PageTableColumn[]) => {
-    const tables = getTableQueryTypes(columns);
-    const cols = getColumnQueryTypes(tables, columns);
-    console.log(cols);
-    const table = "Users";
-    const schema = "dbo";
-    const columnNames = columns.map(x => x.dbColumn).join(",");
+    const tables = getTablesInQuery(columns);
+    console.log(":tables", tables);
+    const cols = getColumnsInQuery(tables, columns);
+    const primaryTable = strictFind(x => x.isPrimary, tables);
+    const joins = await buildJoins(tables);
+    const query = `${buildQuery(cols, primaryTable)}
+                ${joins}
+                `;
 
-    const p = strictFind(x => x.isPrimary, tables);
-    const pc = strictFind(x => x.table.name === p.name, cols);
-
-    const ccc = strictFind(x => x.table.name === tables[1].name, cols);
-
-    const query = `SELECT ${cols.map(x => x.rawSql)} FROM ${p.schema}.${p.name} ${p.alias}
-                JOIN ${tables[1].schema}.${tables[1].name} ${tables[1].alias} ON  ${tables[1].alias}.${ccc.name} = ${p.alias}.${pc.name} `;
     console.log(query);
 
     const pool = new sql.ConnectionPool("mssql://app:123@localhost/eza");
@@ -117,4 +113,23 @@ const getQueryResult = async (columns: PageTableColumn[]) => {
     });
     return responseRow;
 };
+
+const buildJoins = async (tables: TableInQuery[]) => {
+    const primaryTable = strictFind(x => x.isPrimary, tables);
+    const referencedConstrains = await getReferencedContstraints(primaryTable.name);
+    const query = tables
+        .filter(x => !x.isPrimary)
+        .map(x => {
+            const reference = strictFind(r => r.referencedTableName === x.name, referencedConstrains);
+
+            const join = `JOIN ${x.schema}.${x.name} ${x.alias} ON ${x.alias}.${reference.referencingColumnName} = ${primaryTable.alias}.${reference.referencedColumnName}`;
+            return join;
+        });
+    return query.join("\n");
+};
+
+const buildQuery = (columns: ColumnInQuery[], primaryTable: TableInQuery) => {
+    return `SELECT ${columns.map(x => x.rawSql)} FROM ${primaryTable.schema}.${primaryTable.name} ${primaryTable.alias}`;
+};
+
 export { executeQuery, getQueryResult };

@@ -1,7 +1,7 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from "graphql";
 import { AppType } from "./types/AppType";
 import { createApp, addPage } from "../services/AppService";
-import { ColumnInputType } from "./inputTypes/TableInputType";
+import { TableInputType } from "./inputTypes/TableInputType";
 import { Table } from "../models/app/Tables/Table";
 
 const Mutation = new GraphQLObjectType({
@@ -16,8 +16,8 @@ const Mutation = new GraphQLObjectType({
         addPage: {
             type: new GraphQLNonNull(AppType),
             args: {
-                columns: {
-                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColumnInputType)))
+                table: {
+                    type: new GraphQLNonNull(TableInputType)
                 },
                 pageName: {
                     type: new GraphQLNonNull(GraphQLString)

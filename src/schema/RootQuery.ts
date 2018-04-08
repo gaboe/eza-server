@@ -85,9 +85,10 @@ const RootQuery = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve(_, args) {
+            async resolve(_, args) {
                 const { table, pageName } = (args as AppPreview);
-                return getAppPreview(table, pageName);
+                const appPreview = await getAppPreview(table, pageName);
+                return appPreview;
             }
         },
         tableQueryPreview: {

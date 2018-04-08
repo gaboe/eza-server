@@ -5,6 +5,7 @@ type Column = {
     columnName: string;
     tableName: string;
     schemaName: string;
+    isFromPrimaryTable: boolean;
     reference?: Reference;
 };
 
@@ -22,6 +23,7 @@ const columnSchema = new Schema({
     columnName: String,
     tableName: String,
     schemaName: String,
+    isFromPrimaryTable: Boolean,
     reference: referenceSchema
 });
 

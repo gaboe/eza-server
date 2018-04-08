@@ -31,6 +31,7 @@ type ColumnInQuery = {
     rawSql: string;
     table: TableInQuery;
     name: string;
+    alias?: string;
 };
 
 const getTablesInQuery = (table: Table) => {
@@ -65,7 +66,8 @@ const getColumnsInQuery = (foreignTables: TableInQuery[], primaryTable: Table) =
                 const c: ColumnInQuery = {
                     table: table,
                     rawSql: `${table.alias}.${column.columnName}`,
-                    name: column.columnName
+                    name: column.columnName,
+                    alias: `${table.name}${column.columnName}`
                 };
                 return c;
             }
@@ -83,10 +85,10 @@ const getQueryResult = async (table: Table) => {
     const tables = getTablesInQuery(table);
     const cols = getColumnsInQuery(tables, table);
 
-    const query = `SELECT\n${cols.map(x => x.rawSql).join(",\n")}\n FROM ${table.schemaName}.${table.tableName} [T0]
+    const query = `SELECT\n${cols.map(x => x.alias ? `${x.rawSql} ${x.alias}` : `${x.rawSql}`).join(",\n")}\n FROM ${table.schemaName}.${table.tableName} [T0]
                 ${tables.map(x => x.join).join("\n")}
                 `;
-
+    console.log(query);
     const pool = new sql.ConnectionPool("mssql://app:123@localhost/eza");
     await pool.connect();
 

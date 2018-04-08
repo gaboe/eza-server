@@ -4,6 +4,7 @@ type MsSqlColumn = {
     TABLE_NAME: string,
     ORDINAL_POSITION: number,
     DATA_TYPE: string,
+    IsKey: boolean;
 };
 
 export { MsSqlColumn };

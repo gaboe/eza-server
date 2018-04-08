@@ -3,6 +3,7 @@ import { AppType } from "./types/AppType";
 import { createApp, addPage } from "../services/AppService";
 import { TableInputType } from "./inputTypes/TableInputType";
 import { Table } from "../models/app/Tables/Table";
+import { PageType } from "./types/PageType";
 
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
@@ -14,7 +15,7 @@ const Mutation = new GraphQLObjectType({
             }
         },
         addPage: {
-            type: new GraphQLNonNull(AppType),
+            type: new GraphQLNonNull(PageType),
             args: {
                 table: {
                     type: new GraphQLNonNull(TableInputType)

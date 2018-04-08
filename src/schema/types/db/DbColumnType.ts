@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLBoolean } from "graphql";
 
 const DbColumnType = new GraphQLObjectType({
     name: "DbColumnType",
@@ -8,6 +8,7 @@ const DbColumnType = new GraphQLObjectType({
         tableName: { type: new GraphQLNonNull(GraphQLString), },
         position: { type: new GraphQLNonNull(GraphQLInt), },
         dataType: { type: new GraphQLNonNull(GraphQLString), },
+        isKey: { type: new GraphQLNonNull(GraphQLBoolean), },
     }
 });
 

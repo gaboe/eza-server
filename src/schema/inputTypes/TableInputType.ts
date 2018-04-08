@@ -7,6 +7,7 @@ const ColumnInputType = new GraphQLInputObjectType({
         tableName: { type: new GraphQLNonNull(GraphQLString), },
         columnName: { type: new GraphQLNonNull(GraphQLString), },
         isFromPrimaryTable: { type: new GraphQLNonNull(GraphQLBoolean), },
+        isKey: { type: new GraphQLNonNull(GraphQLBoolean), },
         reference: {
             type: new GraphQLInputObjectType({
                 name: "ReferenceInputType",

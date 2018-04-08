@@ -29,7 +29,7 @@ const createApp = () => {
 const addPage = async (table: Table, pageName: string) => {
     const app = await getAppPreview(table, pageName);
     app.save();
-    return app;
+    return app.pages[0];
 };
 
 const getAppByName = async (name: string) => {

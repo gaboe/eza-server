@@ -4,4 +4,5 @@ type DbColumn = {
     tableName: string,
     position: number,
     dataType: string,
+    isKey: boolean;
 };

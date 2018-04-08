@@ -7,6 +7,7 @@ const ColumnType = new GraphQLObjectType({
         tableName: { type: new GraphQLNonNull(GraphQLString) },
         schemaName: { type: new GraphQLNonNull(GraphQLString) },
         isFromPrimaryTable: { type: new GraphQLNonNull(GraphQLBoolean), },
+        isKey: { type: new GraphQLNonNull(GraphQLBoolean), },
         reference: {
             type: new GraphQLObjectType({
                 name: "ColumnReferenceType",

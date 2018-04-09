@@ -20,7 +20,7 @@ const getColumnsByTableName = (tableName: string) => {
 
 
 const getQuery = (tableName: string) => `
-SELECT [TABLE_SCHEMA], [TABLE_NAME], [COLUMN_NAME],  CAST(
+SELECT [TABLE_SCHEMA], [TABLE_NAME], [COLUMN_NAME], [DATA_TYPE],  CAST(
     CASE WHEN EXISTS(SELECT i.name AS IndexName, OBJECT_NAME(ic.OBJECT_ID) AS TableName,
         COL_NAME(ic.OBJECT_ID,ic.column_id) AS ColumnName, s.name AS [SchemaName]
  FROM sys.indexes AS i
